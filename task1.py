@@ -1,15 +1,15 @@
 import cv2
 import numpy as np
 
-car_image = cv2.imread('assignment/images/1.jpeg', cv2.IMREAD_COLOR)
+car_image = cv2.imread('assignment/images/6.jpeg', cv2.IMREAD_COLOR)
 car_image = car_image.astype(np.float32)
 car_image = car_image / 255.0
-car_mask = cv2.imread('assignment/car_masks/1.png', cv2.IMREAD_COLOR)
+car_mask = cv2.imread('assignment/car_masks/6.png', cv2.IMREAD_COLOR)
 car_mask = car_mask.astype(np.float32)
 car_mask = car_mask / 255.0
 floor = cv2.imread('assignment/floor.png', cv2.IMREAD_COLOR)
 wall = cv2.imread('assignment/wall.png', cv2.IMREAD_COLOR)
-shadow = cv2.imread('assignment/shadow_masks/1.png',  cv2.IMREAD_COLOR)
+shadow = cv2.imread('assignment/shadow_masks/6.png',  cv2.IMREAD_COLOR)
 shadow = shadow.astype(np.float32)
 shadow = shadow / 255.0
 
@@ -29,12 +29,12 @@ fil_car_mask_p = np.clip((fil_car_mask/np.max(fil_car_mask))*255, 0, 255).astype
 cv2.imwrite('median_filter.png', fil_car_mask_p)
 
 
-n=10 #img1
+# n=10 #img1
 # n =  5 #img2
 # n=5 #img3
 # n = 6 #img4  
 # n = 10 #img 5
-# n = 10 #img 6
+n = 10 #img 6
 
 
 X, Y = combined_image.shape[1], combined_image.shape[0]
@@ -73,8 +73,8 @@ scale_y  = float(((n-2)*combined_image.shape[0]/n)/car_image.shape[0])
 tpx, tpy = (car_image.shape[1]-shadow.shape[1])/2 , car_image.shape[0]-shadow.shape[0]
 
 
-adjust_y = 10 ##for img1
-adjust_x = 38
+# adjust_y = 10 ##for img1
+# adjust_x = 38
 
 
 
@@ -90,8 +90,8 @@ adjust_x = 38
 # adjust_y = -155#for img5
 # adjust_x = 50
 
-# adjust_y = 60#for img6
-# adjust_x = 50
+adjust_y = 60#for img6
+adjust_x = 50
 ntpx, ntpy = int(tpx*scale_x), int(tpy*scale_y) 
 nsizex, nsizey = int(scale_x*shadow.shape[1]), int(scale_y*shadow.shape[0])
 
@@ -116,7 +116,7 @@ cv2.imwrite('shadow_mask_blurred.png', shadow_mask_blurred_p)
 
 
 #shadow to the ROI
-shadow_intensity = 0.5
+shadow_intensity = 0.8
 shadow_layer = roi_shadow.copy().astype(np.float32)
 shadow_layer[:, :, 0] *= (1 - shadow_intensity * shadow_mask_blurred[:, :, 0])
 shadow_layer[:, :, 1] *= (1 - shadow_intensity * shadow_mask_blurred[:, :, 1])
@@ -129,7 +129,7 @@ result_with_shadow[ntpy_cm + adjust_y:ntpy_cm + nsizey + adjust_y, ntpx_cm + adj
 
 final_result = cv2.GaussianBlur(result_with_shadow, (3, 3), 0)
 final_result_p = np.clip((final_result /np.max(final_result))*255, 0, 255).astype(np.uint8)
-cv2.imwrite('1_final_with_shadow.png', final_result_p)
+cv2.imwrite('6_final_with_shadow.png', final_result_p)
 
 
 
